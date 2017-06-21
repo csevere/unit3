@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+	<script type="text/javascript">
+
+		var apiUrl = 'https://api.themoviedb.org/3/search/movie?api_key=fec8b5ab27b292a68294261bb21b04a5&query=';
+
+		function getMovieData(query){
+			//promise is a built in constructor 
+			//that way the main program knows are are going to resolve it
+			//our main program then count on a .then, .all, .race, etc
+			// to move forward
+			return new Promise((resolve, reject)=>{
+				//making ajax request for api and query
+				$.getJSON(apiUrl + query, (theData)=>{
+					//our Ajax is back. Was an async thing
+					//someone, somewhere is waiting for this promise to be fulfilled
+					//no "if you like you should have put a ring on it"
+					resolve(theData); 
+				});
+			})
+			
+
+		};
+
+		// getMovieData returns a promise
+		//initially that promise will be pending 
+
+		var moviesToSearchFor = [
+			'star wars',
+			'lord of the rings',
+			'rocky',
+			'intersteller',
+			'arthur'
+		]
+
+		//we need an array to stash our promises in 
+		var movieData = [];
+		//map: a fancy for loop, loops through; keeps track of whats iterating through the loop
+		//looping through moviesToSearchFor
+		//pushing data into empty array
+
+		//loop throuhg movies one at a time
+		// send each one to getMovieData
+		// each one returns a Promise
+		// initially they all be pending 
+
+		moviesToSearchFor.map((movie)=>{
+			movieData.push(getMovieData(movie));
+
+		});
+		console.log(movieData)
+
+		//when All promises have been fulfilled, then move forward. Not before
+		Promise.all(movieData).then((finalMovieData)=>{
+			console.log(movieData);
+		}); 
+
+
+
+
+
+
+	</script>
+	
+</body>
+</html>
